@@ -1,5 +1,8 @@
 <?php
 
+//TODO: Create a separate test DB and somehow segregate redis keys so that
+//      executing any tests doesn't blow away actual data. Will need to call
+//      Artisan's migrate in setUp once this is done.
 class ApiLoginTest extends TestCase {
 
     public function setUp()
@@ -15,9 +18,9 @@ class ApiLoginTest extends TestCase {
         DB::table('users')->truncate();
     }
 
-	public function testSuccessfulLogin()
-	{
-		$this->client->request('POST', URL::route('login'), array(
+    public function testSuccessfulLogin()
+    {
+        $this->client->request('POST', URL::route('login'), array(
             'email' => 'stevefranchak@gmail.com',
             'password' => 'test'
         ));
@@ -27,9 +30,9 @@ class ApiLoginTest extends TestCase {
         $jsonResponse = json_decode($this->client->getResponse()->getContent());
         $this->assertObjectHasAttribute('token', $jsonResponse);
         $this->assertInternalType('string', $jsonResponse->token);
-        
+
         $expectedTokenKeyLength = Config::get('session.token_key_length');
         $this->assertTrue(strlen($jsonResponse->token) === $expectedTokenKeyLength);
-	}
+    }
 
 }
