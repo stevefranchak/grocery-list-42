@@ -8,16 +8,14 @@ class ControllerHelper {
 
     public static function respondWithValidationErrors(Illuminate\Validation\Validator $validator)
     {
-        return Response::json(array(
-            'errors' => $validator->messages()->all()
-        ), 400);
+        return self::respondWithErrors($validator->messages()->all(), 400);
     }
 
-    public static function respondWithOwnErrors($errorMessages)
+    public static function respondWithErrors($errorMessages, $statusCode = 400)
     {
         return Response::json(array(
             'errors' => $errorMessages
-        ), 401);
+        ), $statusCode);
     }
-    
+
 }
