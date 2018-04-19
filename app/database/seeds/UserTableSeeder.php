@@ -5,7 +5,7 @@ class UserTableSeeder extends Seeder {
     {
         DB::table('users')->truncate();
         User::create(array(
-            'email' => 'stevefranchak@yahoo.com',
+            'email' => 'stevefranchak@gmail.com',
             'password' => Hash::make('test')
         ))->save();
     }

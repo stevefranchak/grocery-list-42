@@ -29,9 +29,21 @@ return array(
 	|
 	*/
 
-	'lifetime' => 120,
+	'lifetime' => 30,
 
 	'expire_on_close' => false,
+
+	/*
+	|--------------------------------------------------------------------------
+	| Session Token Key Length
+	|--------------------------------------------------------------------------
+	|
+	| Here you may specify the length of the key used to store a token.
+	| Currently only used by TokenStore.
+	|
+	*/
+
+	'token_key_length' => 64,
 
 	/*
 	|--------------------------------------------------------------------------
