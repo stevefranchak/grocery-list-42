@@ -1,8 +1,5 @@
 <?php
 
-const FALLBACK_TOKEN_KEY_LENGTH = 64;
-const SECONDS_IN_MINUTE = 60;
-
 class Token {
     
     public $key;
@@ -22,7 +19,7 @@ class Token {
 
     public static function createByEmail($email)
     {
-        $key = self::generateKey(Config::get('session.token_key_length') ?: FALLBACK_TOKEN_KEY_LENGTH);
+        $key = self::generateKey(Config::get('session.token_key_length') ?: Constant::get('FALLBACK_TOKEN_KEY_LENGTH'));
         $payload = array(
             'email' => $email,
             'userId' => \User::where('email', '=', $email)->first()->id,
@@ -39,7 +36,7 @@ class Token {
 
     public function store() {
         $expirationInMinutes = Config::get('session.lifetime');
-        Redis::setex($this->key, $expirationInMinutes * SECONDS_IN_MINUTE, serialize($this->payload));
+        Redis::setex($this->key, $expirationInMinutes * Constant::get('SECONDS_IN_MINUTE'), serialize($this->payload));
     }
 
 }

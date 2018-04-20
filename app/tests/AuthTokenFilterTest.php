@@ -41,7 +41,7 @@ class AuthTokenFilterTest extends TestCase {
         //TODO: Not entirely sure how to call the filter directly - probably need to encapsulate better
         Route::enableFilters();
         $this->client->request('GET', URL::route('testAuthFilter'), array(), array(), array(
-            'HTTP_AUTHORIZATION' => 'Bearer ' . $tokenKey
+            'HTTP_AUTHORIZATION' => Constant::get('AUTHORIZATION_PREFIX') . $tokenKey
         ));
         Route::disableFilters();
 

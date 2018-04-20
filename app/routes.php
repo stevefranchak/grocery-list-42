@@ -13,9 +13,7 @@
 
 Route::get('/', "HomeController@index");
 
-const API_PREFIX_URI = 'api/v1';
-
-Route::group(array('prefix' => API_PREFIX_URI), function() {
+Route::group(array('prefix' => Constant::get('API_PREFIX_URI')), function() {
 
     Route::post('register', array(
         'as' => 'register',

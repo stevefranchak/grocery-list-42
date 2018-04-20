@@ -89,18 +89,16 @@ Route::filter('csrf', function()
     }
 });
 
-const AUTHORIZATION_PREFIX = 'Bearer ';
-
 Route::filter('auth.token', function() {
     $authorized = True;
     $authorizationHeaderContents = Request::header('Authorization');
 
-    if (!($authorizationHeaderContents && starts_with($authorizationHeaderContents, AUTHORIZATION_PREFIX))) {
+    if (!($authorizationHeaderContents && starts_with($authorizationHeaderContents, Constant::get('AUTHORIZATION_PREFIX')))) {
         $authorized = False;
     }
 
     if ($authorized) {
-        $authorizationPrefixLength = strlen(AUTHORIZATION_PREFIX);
+        $authorizationPrefixLength = strlen(Constant::get('AUTHORIZATION_PREFIX'));
         if (strlen($authorizationHeaderContents) - $authorizationPrefixLength !== Config::get('session.token_key_length')) {
             $authorized = False;
         }
