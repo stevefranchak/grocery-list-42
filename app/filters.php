@@ -88,3 +88,40 @@ Route::filter('csrf', function()
         throw new Illuminate\Session\TokenMismatchException;
     }
 });
+
+const AUTHORIZATION_PREFIX = 'Bearer ';
+
+Route::filter('auth.token', function() {
+    $authorized = True;
+    $authorizationHeaderContents = Request::header('Authorization');
+
+    if (!($authorizationHeaderContents && starts_with($authorizationHeaderContents, AUTHORIZATION_PREFIX))) {
+        $authorized = False;
+    }
+
+    if ($authorized) {
+        $authorizationPrefixLength = strlen(AUTHORIZATION_PREFIX);
+        if (strlen($authorizationHeaderContents) - $authorizationPrefixLength !== Config::get('session.token_key_length')) {
+            $authorized = False;
+        }
+    }
+
+    if ($authorized) {
+        $tokenKey = substr($authorizationHeaderContents, $authorizationPrefixLength);
+        $tokenPayload = Redis::get($tokenKey);
+        if (!$tokenPayload) {
+            $authorized = False;
+        }   
+    }
+
+    if ($authorized) {
+        // Update the expiration for the token in the session store - we don't want to knock out an active user
+        Redis::expire($tokenKey, Config::get('session.lifetime') * 60);
+    } else {
+        return \ControllerHelper::respondWithErrors(array(
+            'Invalid access token.'
+        ), 401);
+    }
+
+
+});

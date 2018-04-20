@@ -1,9 +1,13 @@
 <?php
 
 class ControllerHelper {
-    public static function validateAllInputAgainst($rules)
+    public static function validateInputsAgainst($rules, $inputs = NULL)
     {
-        return Validator::make(Input::all(), $rules);
+        if ($inputs === NULL)
+        {
+            $inputs = Input::all();
+        }
+        return Validator::make($inputs, $rules);
     }
 
     public static function respondWithValidationErrors(Illuminate\Validation\Validator $validator)

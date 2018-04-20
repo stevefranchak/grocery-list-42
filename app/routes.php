@@ -13,9 +13,29 @@
 
 Route::get('/', "HomeController@index");
 
-Route::group(array('prefix' => 'api/v1'), function() {
+const API_PREFIX_URI = 'api/v1';
+
+Route::group(array('prefix' => API_PREFIX_URI), function() {
+
+    Route::post('register', array(
+        'as' => 'register',
+        'uses' => 'AuthController@register'
+    ));
+
     Route::post('login', array(
         'as' => 'login',
         'uses' => 'AuthController@login'
     ));
+
+    Route::group(array(
+        'before' => 'auth.token'
+    ), function() {
+
+        Route::post('ping', array(
+            'as' => 'ping',
+            'uses' => 'AuthController@ping'
+        ));
+
+    });
+
 });
