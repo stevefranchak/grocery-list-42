@@ -33,6 +33,12 @@ Route::group(array('prefix' => Constant::get('API_PREFIX_URI')), function() {
             'uses' => 'AuthController@login'
         ));
 
+        Route::delete('', array(
+            'as' => 'logout',
+            'uses' => 'AuthController@logout',
+            'before' => 'auth.token'
+        ));
+
     });
 
     /*** Myself (ping)  ***/

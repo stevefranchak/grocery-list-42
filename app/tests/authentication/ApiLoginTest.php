@@ -25,19 +25,17 @@ class ApiLoginTest extends TestCase {
 
     public function testSuccessfulLogin()
     {
-        $this->client->request('POST', URL::route('login'), array(
+        $response = TestHelpers::login($this->client, array( 
             'email' => 'stevefranchak@gmail.com',
             'password' => 'test'
         ));
-
-        $this->assertTrue($this->client->getResponse()->isOk());
-
-        $jsonResponse = json_decode($this->client->getResponse()->getContent());
-        $this->assertObjectHasAttribute('token', $jsonResponse);
-        $this->assertInternalType('string', $jsonResponse->token);
+        $this->assertResponseStatus(200);
+        
+        $this->assertObjectHasAttribute('token', $response['parsedJson']);
+        $this->assertInternalType('string', $response['parsedJson']->token);
 
         $expectedTokenKeyLength = Config::get('session.token_key_length');
-        $this->assertTrue(strlen($jsonResponse->token) === $expectedTokenKeyLength);
+        $this->assertTrue(strlen($response['parsedJson']->token) === $expectedTokenKeyLength);
     }
 
 }

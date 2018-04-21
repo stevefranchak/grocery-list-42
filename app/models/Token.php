@@ -44,6 +44,11 @@ class Token {
         return new self($key, unserialize($payload));
     }
 
+    public static function destroy($key)
+    {
+        return Redis::del($key);
+    }
+
     public static function getKeyFromRequest()
     {
         $authorizationHeaderContents = Request::header('Authorization');

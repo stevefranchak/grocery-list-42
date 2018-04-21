@@ -49,6 +49,19 @@ class AuthController extends \BaseController {
         );
     }
 
+    public function logout()
+    {
+        try {
+            Token::destroy(GlobalUserToken::get()->key);
+        } catch (Exception $exception) {
+            return \ControllerHelper::respondWithErrors(array(
+                "Failed to destroy the user's session. The user's session may still be active if it exists."
+            ), 500);
+        }
+
+        return Response::json('', 204);
+    }
+
     public function ping()
     {
         return GlobalUserToken::get()->payload;
