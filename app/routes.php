@@ -15,21 +15,33 @@ Route::get('/', "HomeController@index");
 
 Route::group(array('prefix' => Constant::get('API_PREFIX_URI')), function() {
 
-    Route::post('register', array(
-        'as' => 'register',
-        'uses' => 'AuthController@register'
-    ));
+    /***  Users  ***/
+    Route::group(array('prefix' => 'users'), function() {
 
-    Route::post('login', array(
-        'as' => 'login',
-        'uses' => 'AuthController@login'
-    ));
+        Route::post('', array(
+            'as' => 'register',
+            'uses' => 'AuthController@register'
+        ));
 
+    });
+
+    /***  Session  ***/
+    Route::group(array('prefix' => 'session'), function() {
+
+        Route::post('', array(
+            'as' => 'login',
+            'uses' => 'AuthController@login'
+        ));
+
+    });
+
+    /*** Myself (ping)  ***/
     Route::group(array(
-        'before' => 'auth.token'
+        'before' => 'auth.token',
+        'prefix' => 'myself'
     ), function() {
 
-        Route::post('ping', array(
+        Route::get('', array(
             'as' => 'ping',
             'uses' => 'AuthController@ping'
         ));

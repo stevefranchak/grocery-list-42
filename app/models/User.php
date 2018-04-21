@@ -16,13 +16,23 @@ class User extends Eloquent implements UserInterface {
      */
     protected $table = 'users';
 
-    protected $fillable = array('email', 'password');
+    protected $fillable = array('email', 'password', 'accountId');
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = array('password');
+    protected $hidden = array('password', 'id', 'created_at', 'updated_at');
+
+    public function scopeByEmail($query, $email)
+    {
+        return $query->where('email', '=', $email);
+    }
+
+    public static function getByEmail($email)
+    {
+        return User::byEmail($email)->first();
+    }
 
 }

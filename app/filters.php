@@ -91,30 +91,17 @@ Route::filter('csrf', function()
 
 Route::filter('auth.token', function() {
     $authorized = True;
-    $authorizationHeaderContents = Request::header('Authorization');
 
-    if (!($authorizationHeaderContents && starts_with($authorizationHeaderContents, Constant::get('AUTHORIZATION_PREFIX')))) {
+    try {
+        $tokenKey = Token::getKeyFromRequest();
+    } catch(Exception $exception) {
         $authorized = False;
     }
-
-    if ($authorized) {
-        $authorizationPrefixLength = strlen(Constant::get('AUTHORIZATION_PREFIX'));
-        if (strlen($authorizationHeaderContents) - $authorizationPrefixLength !== Config::get('session.token_key_length')) {
-            $authorized = False;
-        }
-    }
-
-    if ($authorized) {
-        $tokenKey = substr($authorizationHeaderContents, $authorizationPrefixLength);
-        $tokenPayload = Redis::get($tokenKey);
-        if (!$tokenPayload) {
-            $authorized = False;
-        }   
-    }
-
-    if ($authorized) {
+    
+    if ($authorized && ($token = Token::load($tokenKey))) {
         // Update the expiration for the token in the session store - we don't want to knock out an active user
-        Redis::expire($tokenKey, Config::get('session.lifetime') * 60);
+        Redis::expire($tokenKey, Config::get('session.lifetime') * Constant::get('SECONDS_IN_MINUTE'));
+        GlobalUserToken::set($token);
     } else {
         return \ControllerHelper::respondWithErrors(array(
             'Invalid access token.'

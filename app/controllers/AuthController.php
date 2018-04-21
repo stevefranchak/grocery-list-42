@@ -11,14 +11,13 @@ class AuthController extends \BaseController {
             return $validationResults['errorResponse'];
         }
 
-        User::create(array(
+        $newUser = User::create(array(
             'email' => $validationResults['email'],
-            'password' => Hash::make($validationResults['password'])
+            'password' => Hash::make($validationResults['password']),
+            'accountId' => Uuid::uuid4(),
         ));
 
-        return Response::json(array(
-            'isSuccessful' => True
-        ), 201);
+        return Response::json($newUser, 201);
     }
 
     public function login()
@@ -28,14 +27,16 @@ class AuthController extends \BaseController {
             return $validationResults['errorResponse'];
         }
         
-        if (!Auth::attempt(array('email' => $validationResults['email'], 'password' => $validationResults['password']))) {
+        $user = User::getByEmail($validationResults['email']);
+
+        if (is_null($user) || !Auth::attempt(array('email' => $validationResults['email'], 'password' => $validationResults['password']))) {
             return \ControllerHelper::respondWithErrors(array(
                 'Invalid credentials.'
             ), 401);
         }
 
         try {
-            $token = \Token::createByEmail($validationResults['email']);
+            $token = \Token::createWithPayload($user);
             $token->store();
         } catch (Exception $exception) {
             return \ControllerHelper::respondWithErrors(array(
@@ -50,13 +51,13 @@ class AuthController extends \BaseController {
 
     public function ping()
     {
-        return array(
-            'loggedIn' => True
-        );
+        return GlobalUserToken::get()->payload;
     }
 
     private function validateCredentials($options = array())
     {
+        
+        
         $results = array(
             'email' => Input::get('email'),
             'password' => Input::get('password'),
