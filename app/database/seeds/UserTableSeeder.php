@@ -3,7 +3,7 @@
 class UserTableSeeder extends Seeder {
     public function run()
     {
-        DB::table('users')->truncate();
+        DbTableHelpers::emptyTable('users');
 
         User::create(array(
             'email' => 'stevefranchak@gmail.com',

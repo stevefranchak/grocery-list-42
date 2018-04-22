@@ -22,7 +22,7 @@ class ApiMyselfTest extends TestCase {
 
         Redis::flushall();
         
-        DB::table('users')->truncate();
+        DbTableHelpers::emptyTable('users');
     }
 
     public function testSuccessfulMyself()

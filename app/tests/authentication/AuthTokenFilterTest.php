@@ -33,7 +33,7 @@ class AuthTokenFilterTest extends TestCase {
 
         Redis::flushall();
 
-        DB::table('users')->truncate();
+        DbTableHelpers::emptyTable('users');
     }
 
     public function testSuccessfulAuth()

@@ -15,7 +15,7 @@ class ApiLoginTest extends TestCase {
 
         Redis::flushall();
         
-        DB::table('users')->truncate();
+        DbTableHelpers::emptyTable('users');
     }
 
     public function testSuccessfulLogin()
@@ -71,6 +71,12 @@ class ApiLoginTest extends TestCase {
         TestHelpers::login($this->client, array( 
             'email' => 'stevefranchak@gmail.com',
             'password' => 'test6'
+        ));
+        $this->assertResponseStatus(401);
+
+        TestHelpers::login($this->client, array( 
+            'email' => 'stevefranchak@gmail.com',
+            'password' => 'reach4tehsky'
         ));
         $this->assertResponseStatus(401);
     }
