@@ -53,16 +53,16 @@ class AuthTokenFilterTest extends TestCase {
 
     public function testInvalidTokens()
     {
-        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('logout'), '');
+        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('testAuthFilter'), '');
         $this->assertResponseStatus(401);
 
-        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('logout'), 'lalalala');
+        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('testAuthFilter'), 'lalalala');
         $this->assertResponseStatus(401);
 
-        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('logout'), $this->token . 'a');
+        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('testAuthFilter'), $this->token . 'a');
         $this->assertResponseStatus(401);
 
-        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('logout'), 27);
+        TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('testAuthFilter'), 27);
         $this->assertResponseStatus(401);
     }
 

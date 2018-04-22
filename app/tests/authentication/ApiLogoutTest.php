@@ -32,6 +32,10 @@ class ApiLogoutTest extends TestCase {
 
         TestHelpers::makeAuthenticatedRequest($this->client, 'DELETE', URL::route('logout'), $this->token);
         $this->assertResponseStatus(401);
+
+        // Test another route that requires authentication
+        TestHelpers::makeAuthenticatedRequest($this->client, 'GET', URL::route('ping'), $this->token);
+        $this->assertResponseStatus(401);
     }
 
     public function testInvalidTokens()

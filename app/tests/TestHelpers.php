@@ -4,26 +4,36 @@ class TestHelpers {
 
     public static function login($client, $credentials)
     {
-        $client->request('POST', URL::route('login'), $credentials);
-
-        return self::parseResponse($client, True);
+        return self::makeRequest($client, 'POST', URL::route('login'), $credentials, array('includeToken' => True));
     }
 
-    public static function makeAuthenticatedRequest($client, $method, $route, $token)
+    public static function makeAuthenticatedRequest($client, $method, $route, $token, $payload = array(), $options = array())
     {
         Route::enableFilters();
-        $client->request($method, $route, array(), array(), array(
+        $client->request($method, $route, $payload, array(), array(
             'HTTP_AUTHORIZATION' => Constant::get('AUTHORIZATION_PREFIX') . $token
         ));
         Route::disableFilters();
 
-        return self::parseResponse($client);
+        return self::parseResponse($client, $options);
     }
 
-    public static function parseResponse($client, $includeToken = False)
+    public static function makeRequest($client, $method, $route, $payload = array(), $options = array())
+    {
+        // Keep routes enabled to make sure there are no guards enforced on a route accidentally
+        Route::enableFilters();
+        $client->request($method, $route, $payload);
+        Route::disableFilters();
+
+        return self::parseResponse($client, $options);
+    }
+
+    public static function parseResponse($client, $options = array())
     {
         $parsedJson = NULL;
         $token = NULL;
+
+        $includeToken = array_get($options, 'includeToken') || False;
         
         try {
             $parsedJson = json_decode($client->getResponse()->getContent());
