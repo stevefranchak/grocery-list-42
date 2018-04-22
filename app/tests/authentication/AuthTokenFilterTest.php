@@ -23,7 +23,7 @@ class AuthTokenFilterTest extends TestCase {
 
         $this->token = TestHelpers::login($this->client, array( 
             'email' => 'stevefranchak@gmail.com',
-            'password' => 'test'
+            'password' => 'reach4TEHsky'
         ))['token']; 
     }
 

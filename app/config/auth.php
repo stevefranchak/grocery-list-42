@@ -68,4 +68,6 @@ return array(
 
 	),
 
+	'minimum_password_length' => 6,
+
 );

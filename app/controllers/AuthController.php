@@ -22,7 +22,9 @@ class AuthController extends \BaseController {
 
     public function login()
     {
-        $validationResults = $this->validateCredentials();
+        $validationResults = $this->validateCredentials(array(
+            'ignoreMinPasswordLengthConstraint' => True
+        ));
         if (!$validationResults['isValid']) {
             return $validationResults['errorResponse'];
         }
@@ -69,8 +71,6 @@ class AuthController extends \BaseController {
 
     private function validateCredentials($options = array())
     {
-        
-        
         $results = array(
             'email' => Input::get('email'),
             'password' => Input::get('password'),
@@ -81,7 +81,7 @@ class AuthController extends \BaseController {
         $validator = \ControllerHelper::validateInputsAgainst(
             array(
                 'email' => 'required|email' . (array_get($options, 'failIfEmailExists') ? '|unique:users,email' : ''),
-                'password' => 'required|string|max:64'
+                'password' => 'required|string|max:64' . (array_get($options, 'ignoreMinPasswordLengthConstraint') ? '' : '|min:' . Config::get('auth.minimum_password_length')),
             ),
             array(
                 'email' => $results['email'],
