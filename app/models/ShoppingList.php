@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class GroceryList extends Model
+class ShoppingList extends Model
 {
     /**
      * The attributes that are mass assignable.

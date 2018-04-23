@@ -1,11 +1,11 @@
 import 'angular-route';
-import './controllers/groceryListController';
+import './controllers/ShoppingListController';
 
-const app = angular.module('mainRoutes', ['ngRoute', 'groceryList']);
+const app = angular.module('mainRoutes', ['ngRoute', 'ShoppingList']);
  
 app.config(function ($routeProvider) {
     $routeProvider.when('/', {
-        templateUrl: "templates/groceryListView.html",
-        controller: 'groceryListController'
+        templateUrl: "templates/ShoppingListView.html",
+        controller: 'ShoppingListController'
     });
 });

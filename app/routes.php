@@ -54,12 +54,12 @@ Route::group(array('prefix' => Constant::get('API_PREFIX_URI')), function() {
 
     });
 
-    /*** Grocery Lists  ***/
+    /*** Shopping Lists  ***/
     Route::group(array(
         'before' => 'auth.token'
     ), function() {
 
-        Route::resource('grocery_lists', 'GroceryListController');
+        Route::resource('shopping_lists', 'ShoppingListController');
 
     });
 

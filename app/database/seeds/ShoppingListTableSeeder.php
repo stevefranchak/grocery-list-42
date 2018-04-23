@@ -1,19 +1,19 @@
 <?php
 
-class GroceryListTableSeeder extends Seeder {
+class ShoppingListTableSeeder extends Seeder {
     public function run()
     {
-        DbTableHelpers::emptyTable('grocery_lists');
+        DbTableHelpers::emptyTable('shopping_lists');
 
         $userId = User::where('email', '=', 'stevefranchak@gmail.com')->first()->id;
 
-        GroceryList::create(array(
+        ShoppingList::create(array(
             'user_id' => $userId,
             'name' => 'Weekly Grocery List',
             'for_store' => 'Wegmans',
         ));
 
-        GroceryList::create(array(
+        ShoppingList::create(array(
             'user_id' => $userId,
             'name' => 'Target Run',
         ));

@@ -1,6 +1,6 @@
 <?php
 
-class GroceryListController extends \BaseController {
+class ShoppingListController extends \BaseController {
 
 	/**
 	 * Display a listing of the resource.
@@ -9,7 +9,7 @@ class GroceryListController extends \BaseController {
 	 */
 	public function index()
 	{
-		return GroceryList::byLoggedInUser()->get();
+		return ShoppingList::byLoggedInUser()->get();
 	}
 
 
