@@ -5,8 +5,14 @@ const browserify = require('browserify');
 const babelify = require('babelify');
 const sass = require('gulp-sass');
 const rename = require('gulp-rename');
+const clean = require('gulp-clean');
 
-gulp.task('build:js', () => {
+gulp.task('clean:dist', () => {
+    return gulp.src('./public/dist/**/*', {read: false})
+        .pipe(clean());
+});
+
+gulp.task('build:js', ['clean:dist'], () => {
     browserify('./ui/src/index.js')
         .transform(
             babelify.configure({
@@ -19,7 +25,7 @@ gulp.task('build:js', () => {
         ))
 });
 
-gulp.task('build:sass', () => {
+gulp.task('build:sass', ['clean:dist'], () => {
     gulp.src('./ui/src/style/index.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(rename('app.css'))
