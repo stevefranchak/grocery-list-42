@@ -13,7 +13,16 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
         $testEnvironment = 'testing';
 
-        return require __DIR__.'/../../bootstrap/start.php';
+        $app = require __DIR__.'/../../bootstrap/start.php';
+
+        $this->prepareForTests();
+
+        return $app;
+    }
+
+    private function prepareForTests()
+    {
+        Artisan::call('migrate:refresh', ['--database' => Config::get('database.default')]);
     }
 
 }
