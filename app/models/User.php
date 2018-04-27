@@ -35,4 +35,9 @@ class User extends Eloquent implements UserInterface {
         return User::byEmail($email)->first();
     }
 
+    public static function getLoggedInUserId()
+    {
+        return GlobalUserToken::get()->payload->id;
+    }
+
 }

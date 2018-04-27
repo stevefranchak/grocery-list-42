@@ -15,7 +15,8 @@ class ShoppingList extends Model
 
     public function scopeByLoggedInUser($query)
     {
-        $id = GlobalUserToken::get()->payload->id;
+        $id = User::getLoggedInUserId();
         return $query->where('user_id', '=', $id);
     }
+
 }
